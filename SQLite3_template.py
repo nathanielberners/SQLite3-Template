@@ -4,8 +4,6 @@
 #   Uses path checking, database checking and error handling.
 #   Supports user access limiting (free-for-all unless one or more usernames are configured).
 #
-#   Written by Nathaniel Berners - nathanieljb@pm.me
-#
 #   Error handling is provided by the function errors(). It's use is thus:
 #       errors( errnum, erritem, errmessage, dbconn, errexit )
 #           errnum - is the error number to report (to assist in bug hunting); manually defined or None
@@ -32,7 +30,7 @@ userNames   = ( [  ] )  # Add an OS login username (or more) to control access
 import  os, sys
 
 # Expand paths
-fullPath = ( [ os.path.expanduser( dataPath[ 0 ] + "/" ) ] )
+fullPath = ( [ os.path.expanduser( dataPath[0] + "/" ) ] )
 
 # Define error handling function
 def errors( errnum, erritem, errmessage, dbconn, errexit ):
@@ -61,17 +59,17 @@ if len( userNames ) >= 1:
         errors( "1", "", "Permission denied to user: " + getUser, None, 1 )
 
 # File path checks
-if not os.path.exists( fullPath[ 0 ] ):
-    errors( "2", fullPath[ 0 ], " does not exist", None, 1 )
+if not os.path.exists( fullPath[0] ):
+    errors( "2", fullPath[0], " does not exist", None, 1 )
 for i in range( len( fileDepends ) ):
-    if not os.path.exists( fullPath[ 0 ] + fileDepends[ i ] ):
-        errors( "3", fullPath[ 0 ] + fileDepends[ i ], " does not exist", None, 1 )
+    if not os.path.exists( fullPath[0] + fileDepends[i] ):
+        errors( "3", fullPath[0] + fileDepends[i], " does not exist", None, 1 )
 
 # Import SQLite3
 import  sqlite3     as  sql
 
 # Database connection
-dbConn  = sql.connect( fullPath[ 0 ] + fileDepends[ 0 ] )
+dbConn  = sql.connect( fullPath[0] + fileDepends[0] )
 try:
     dbCurs = dbConn.cursor()
 except:
@@ -80,10 +78,10 @@ except:
 # Test database sanity
 tabletest = 0
 for i in range( len( dbTables ) ):
-    dbTest = dbCurs.execute( "SELECT name FROM sqlite_master WHERE type='table' AND name='"+dbTables[ i ]+"'" )
+    dbTest = dbCurs.execute( "SELECT name FROM sqlite_master WHERE type='table' AND name='"+dbTables[i]+"'" )
     if dbTest.fetchone() is None:
         tabletest += 1
-        errors( "", dbTables[ i ], " table missing", None, 0 )
+        errors( "", dbTables[i], " table missing", None, 0 )
 if tabletest > 0:
     errors( "5", "", "Database sanity check failed", dbConn, 1 )
 
