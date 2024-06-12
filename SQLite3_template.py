@@ -1,6 +1,6 @@
 #!/bin/python
 
-#   SQLite3 program stub for developing SQLite3 backed programs.
+#   SQLite3 Template - program stub for developing SQLite3 backed programs.
 #   Uses path checking, database checking and error handling.
 #   Supports user access limiting (free-for-all unless one or more usernames are configured).
 #
@@ -20,10 +20,10 @@
 ### CONFIGURATION ###########################################################################################
 
 # Tuples - immutable configurations
-programName = ( [  ] )  # The name of the program
-dataPath    = ( [  ] )  # Path to data directory
-fileDepends = ( [  ] )  # Files required to run, first tuple MUST be the SQLite3 db file
-dbTables    = ( [  ] )  # Table names used in the SQLite3 databse
+programName = ( [ "SQLite3 Template" ] )  # The name of the program
+dataPath    = ( [ "sqlite3template" ] )  # Path to data directory
+fileDepends = ( [ "sqlite3template.db" ] )  # Files required to run, first tuple MUST be the SQLite3 db file
+dbTables    = ( [ "sqlite3template" ] )  # Table names used in the SQLite3 databse
 userNames   = ( [  ] )  # Add an OS login username (or more) to control access
 
 ### CHECKS AND INIT #########################################################################################
@@ -41,13 +41,13 @@ def errors( errnum, erritem, errmessage, dbconn, errexit ):
     print( erritem + errmessage )
     if dbconn == True:
         dbConn.close()
-    if errexit is not 0:
+    if errexit != 0:
         sys.exit( 1 )
 
 # Terminal clearing
 def clearTerm():
     os.system( "cls||clear" )
-    if len( programName ) is not 0:
+    if len( programName ) != 0:
         header = programName[ 0 ]
     else:
         header = "Sqlite3 Program"
@@ -58,18 +58,17 @@ clearTerm()
 if len( userNames ) >= 1:
     getUser = os.getlogin()
     if not getUser in userNames:
-        errors( "1", None, "Permission denied to user: " + getUser, None, 1 )
-
-# System Imports
-import  platform
-import  sqlite3     as  sql
+        errors( "1", "", "Permission denied to user: " + getUser, None, 1 )
 
 # File path checks
 if not os.path.exists( fullPath[ 0 ] ):
-    errors( "2", fullPath[ 0 ], " does not exist", None )
+    errors( "2", fullPath[ 0 ], " does not exist", None, 1 )
 for i in range( len( fileDepends ) ):
     if not os.path.exists( fullPath[ 0 ] + fileDepends[ i ] ):
         errors( "3", fullPath[ 0 ] + fileDepends[ i ], " does not exist", None, 1 )
+
+# Import SQLite3
+import  sqlite3     as  sql
 
 # Database connection
 dbConn  = sql.connect( fullPath[ 0 ] + fileDepends[ 0 ] )
